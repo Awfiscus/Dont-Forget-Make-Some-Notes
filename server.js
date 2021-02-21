@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
-const bd = require("./db.json");
+const fs = require("fs");
+const bd = require("./db/db.json");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -19,9 +20,23 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  const notesFile = req.body(bd);
-  console.log(notesFile);
-  return res.json(notesFile);
+  const data = fs.readFile("db.json");
+  const notesFile = JSON.parse(data);
+  console.log(data);
+  res.json(notesFile);
+});
+
+app.post("/api/notes", (req, res) => {
+  const newNote = req.body;
+
+  notes.push(newNote);
+  fs.writeFile("db.json", notes, (err) => {
+    if (err) {
+      console.log("error writing file");
+    } else {
+      console.log("Succesfully Written!");
+    }
+  });
 });
 
 //listener
