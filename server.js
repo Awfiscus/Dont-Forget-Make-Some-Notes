@@ -11,8 +11,14 @@ app.use(express.json());
 const noteTitles = [];
 const notes = [];
 
+app.use(express.static(__dirname + "/public"));
+
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "./public/index.html"))
+);
+
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "./public/assets/js/index.js"))
 );
 
 app.get("/notes", (req, res) =>
@@ -20,7 +26,7 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  const data = fs.readFile("db.json");
+  const data = fs.readFile("./db/db.json");
   const notesFile = JSON.parse(data);
   console.log(data);
   res.json(notesFile);
