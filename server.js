@@ -28,7 +28,6 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  //STOPPED HERE
   fs.readFile("./db/db.json", (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
@@ -46,7 +45,11 @@ app.post("/api/notes", (req, res) => {
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     if (err) throw err;
   });
+  res.json(notes);
 });
+
+//STOPPED HERE
+// app.delete('/api/notes',)
 
 //listener
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
