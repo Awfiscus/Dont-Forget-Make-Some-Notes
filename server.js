@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const noteTitles = [];
-const notes = [];
+let notes = [];
 
 app.use(express.static(__dirname + "/public"));
 
@@ -26,24 +26,27 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  const data = fs.readFile("./db/db.json");
-  const notesFile = JSON.parse(data);
-  console.log(data);
-  res.json(notesFile);
-});
-
-app.post("/api/notes", (req, res) => {
-  const newNote = req.body;
-
-  notes.push(newNote);
-  fs.writeFile("db.json", notes, (err) => {
-    if (err) {
-      console.log("error writing file");
-    } else {
-      console.log("Succesfully Written!");
-    }
+  //STOPPED HERE
+  fs.readFile("./db/db.json", (err, data) => {
+    if (err) throw err;
+    notes = JSON.parse(data);
+    return notes;
   });
+  res.json(notes);
 });
+
+// app.post("/api/notes", (req, res) => {
+//   const newNote = req.body;
+
+//   notes.push(newNote);
+//   fs.writeFile("db.json", notes, (err) => {
+//     if (err) {
+//       console.log("error writing file");
+//     } else {
+//       console.log("Succesfully Written!");
+//     }
+//   });
+// });
 
 //listener
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
