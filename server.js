@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const bd = require("./db/db.json");
+const { v4: uuidv4 } = require("uuid");
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -35,18 +37,16 @@ app.get("/api/notes", (req, res) => {
   res.json(notes);
 });
 
-// app.post("/api/notes", (req, res) => {
-//   const newNote = req.body;
+app.post("/api/notes", (req, res) => {
+  const newNote = req.body;
 
-//   notes.push(newNote);
-//   fs.writeFile("db.json", notes, (err) => {
-//     if (err) {
-//       console.log("error writing file");
-//     } else {
-//       console.log("Succesfully Written!");
-//     }
-//   });
-// });
+  newNote.id = uuidv4();
+
+  notes.push(newNote);
+  fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
+    if (err) throw err;
+  });
+});
 
 //listener
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
