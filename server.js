@@ -31,6 +31,7 @@ app.get("/api/notes", (req, res) => {
   fs.readFile("./db/db.json", (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
+    console.log(notes);
     return notes;
   });
   res.json(notes);
@@ -49,7 +50,18 @@ app.post("/api/notes", (req, res) => {
 });
 
 //STOPPED HERE
-// app.delete('/api/notes',)
+
+app.delete("/api/notes/:id", (req, res) => {
+  fs.readFile("./db/db.json", "utf-8", (err, data) => {
+    let id = req.params.id;
+    const parseData = JSON.parse(data);
+    const remainingNotes = parseData.filter((note) => note.id !== id);
+    fs.writeFile("./db/db.json", JSON.stringify(remainingNotes), (err) => {
+      if (err) throw err;
+    });
+  });
+  res.json(notes);
+});
 
 //listener
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
